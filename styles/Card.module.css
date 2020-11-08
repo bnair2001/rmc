@@ -1,0 +1,19 @@
+.card{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.reaction{
+    margin: 7px;
+    
+}
+.nogutrow {
+    margin-right: 0;
+    margin-left: 0;
+  
+}
+
+.nogutcol {
+    padding-right: 0;
+    padding-left: 0;
+}

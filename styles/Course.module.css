@@ -1,0 +1,9 @@
+.main{
+    width: 150px; 
+}
+
+.parent{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
