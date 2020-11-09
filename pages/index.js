@@ -5,6 +5,7 @@ import MainButtons from '../components/MainButtons';
 import Typing from 'react-typing-animation';
 
 const AnimatedTypingComponent = () => (
+  // https://github.com/notadamking/react-typing-animation
   <Typing>
      <Typing speed={500} />
     <span><h1>Welcome to Rate my Course</h1></span>

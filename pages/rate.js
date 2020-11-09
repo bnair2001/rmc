@@ -22,6 +22,7 @@ const options3 = [
   { value: 'superstar', label: 'superstar' },
 ]
 
+
 const marks = {
   1: <strong>1</strong>,
   2: <strong>2</strong>,
@@ -74,35 +75,35 @@ export default class Rate extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if (Object.keys(this.state.selectedUni).length === 0 && this.state.selectedUni.constructor === Object){
-      this.setState({errors: true});
+    if (Object.keys(this.state.selectedUni).length === 0 && this.state.selectedUni.constructor === Object) {
+      this.setState({ errors: true });
     }
-    else if(Object.keys(this.state.selectedCourse).length === 0 && this.state.selectedCourse.constructor === Object){
-      this.setState({errors: true});
+    else if (Object.keys(this.state.selectedCourse).length === 0 && this.state.selectedCourse.constructor === Object) {
+      this.setState({ errors: true });
     }
-    else if(Object.keys(this.state.selectedProf).length === 0 && this.state.selectedProf.constructor === Object){
-      this.setState({errors: true});
+    else if (Object.keys(this.state.selectedProf).length === 0 && this.state.selectedProf.constructor === Object) {
+      this.setState({ errors: true });
     }
-    else if(this.state.wytia === ""){
-      this.setState({errors: true});
+    else if (this.state.wytia === "") {
+      this.setState({ errors: true });
     }
-    else if(this.state.credit === ""){
-      this.setState({errors: true});
+    else if (this.state.credit === "") {
+      this.setState({ errors: true });
     }
-    else if(this.state.textbook === ""){
-      this.setState({errors: true});
+    else if (this.state.textbook === "") {
+      this.setState({ errors: true });
     }
-    else if(this.state.attendance === ""){
-      this.setState({errors: true});
+    else if (this.state.attendance === "") {
+      this.setState({ errors: true });
     }
-    else if(this.state.comment === ""){
-      this.setState({errors: true});
+    else if (this.state.comment === "") {
+      this.setState({ errors: true });
     }
-    else if(this.state.tandc === false){
-      this.setState({errors: true});
+    else if (this.state.tandc === false) {
+      this.setState({ errors: true });
     }
-    else{
-      this.setState({errors: false});
+    else {
+      this.setState({ errors: false });
     }
     console.log(this.state);
   }
@@ -111,9 +112,9 @@ export default class Rate extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleTac = () =>{
-    this.setState({tandc: !this.state.tandc});
-  } 
+  handleTac = () => {
+    this.setState({ tandc: !this.state.tandc });
+  }
   componentDidMount() {
     this.setState({
       universities: options, //check if there is a nbetter way to do it with SSR
@@ -164,12 +165,12 @@ export default class Rate extends Component {
           <FormGroup >
             {/* Quality */}
             <h5>Quality:</h5>
-            <Slider min={1} max={5} marks={marks} name="quality" onChange={(val) => this.handleQualitySlider(val)} className="mb-4"/>
+            <Slider min={1} max={5} marks={marks} name="quality" onChange={(val) => this.handleQualitySlider(val)} className="mb-4" />
           </FormGroup>
           <FormGroup>
             {/* Difficulty */}
             <h5>Difficulty:</h5>
-            <Slider min={1} max={5} marks={marks} name="difficulty" onChange={(val) => this.handleDifficultySlider(val)} className="mb-5"/>
+            <Slider min={1} max={5} marks={marks} name="difficulty" onChange={(val) => this.handleDifficultySlider(val)} className="mb-5" />
           </FormGroup>
           <FormGroup>
             {/* Would you take this again */}
@@ -282,13 +283,13 @@ export default class Rate extends Component {
             <FormGroup row>
               <Label for="password" sm={2}>Password</Label>
               <Col sm={10}>
-                <Input type="password" name="password" id="password"  onChange={(e) => this.handleChange(e)} value={this.state.password} />
+                <Input type="password" name="password" id="password" onChange={(e) => this.handleChange(e)} value={this.state.password} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Label for="confirmPassword" sm={2}>Confirm Password</Label>
               <Col sm={10}>
-                <Input type="password" name="confirmPassword" id="confirmPassword"  onChange={(e) => this.handleChange(e)} value={this.state.confirmPassword} />
+                <Input type="password" name="confirmPassword" id="confirmPassword" onChange={(e) => this.handleChange(e)} value={this.state.confirmPassword} />
               </Col>
             </FormGroup>
           </FormGroup>
@@ -306,14 +307,14 @@ export default class Rate extends Component {
           <Row className="align-items-center mb-3">
             <Col></Col>
             <Col className="text-center">
-            <Button color="primary" onClick={(e) => this.handleSubmit(e)} className="pl-5 pr-5">Submit</Button>
+              <Button color="primary" onClick={(e) => this.handleSubmit(e)} className="pl-5 pr-5">Submit</Button>
             </Col>
             <Col></Col>
           </Row>
-          
+
         </Form>
         {this.state.errors && <Alert color="danger">
-        Oops! You missed something!
+          Oops! You missed something!
       </Alert>}
       </Layout>
     );

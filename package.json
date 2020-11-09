@@ -19,7 +19,9 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-select": "^3.1.0",
+    "react-tag-input": "^6.4.3",
     "react-typing-animation": "^1.6.2",
+    "reactjs-tag-input": "^2.0.15",
     "reactstrap": "^8.6.0"
   }
 }
