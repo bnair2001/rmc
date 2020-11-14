@@ -1,27 +1,28 @@
 {
-  "name": "rmc-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/react-fontawesome": "^0.1.12",
-    "babel-runtime": "^6.26.0",
-    "bootstrap": "^4.5.3",
-    "next": "9.5.5",
-    "rc-slider": "^9.5.4",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-select": "^3.1.0",
-    "react-tag-input": "^6.4.3",
-    "react-typing-animation": "^1.6.2",
-    "reactjs-tag-input": "^2.0.15",
-    "reactstrap": "^8.6.0"
-  }
+    "name": "rmc-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.32",
+        "@fortawesome/free-brands-svg-icons": "^5.15.1",
+        "@fortawesome/free-solid-svg-icons": "^5.15.1",
+        "@fortawesome/react-fontawesome": "^0.1.12",
+        "babel-runtime": "^6.26.0",
+        "bootstrap": "^4.5.3",
+        "next": "9.5.5",
+        "next-on-netlify": "^2.6.0",
+        "rc-slider": "^9.5.4",
+        "react": "17.0.1",
+        "react-dom": "17.0.1",
+        "react-select": "^3.1.0",
+        "react-tag-input": "^6.4.3",
+        "react-typing-animation": "^1.6.2",
+        "reactjs-tag-input": "^2.0.15",
+        "reactstrap": "^8.6.0"
+    }
 }
