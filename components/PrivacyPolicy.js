@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
 
             <h2>Consent</h2>
 
-            <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms. For our Terms and Conditions, please visit the <a href="">Terms & Conditions</a>.</p>
+            <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms. For our Terms and Conditions, please visit the <a href="/terms">Terms & Conditions</a>.</p>
 
             <h2>Information we collect</h2>
 
