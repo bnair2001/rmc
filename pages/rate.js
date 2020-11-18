@@ -1,10 +1,15 @@
 // import Head from 'next/head'
 import React, { Component } from 'react';
 import Layout from '../components/Layout';
+import Loading from '../components/Loading';
 import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 import { Button, FormGroup, Form, Row, Col, Label, Input, Alert } from "reactstrap";
 import Slider from 'rc-slider';
 import styles from '../styles/Radio.module.css';
+import axios from 'axios';
+import LoadingSm from '../components/LoadingSm';
+import Router from 'next/router'
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -22,7 +27,16 @@ const options3 = [
   { value: 'superstar', label: 'superstar' },
 ]
 
-
+const tags = [
+  {value:"LOTS OF HOMEWORK", label:"LOTS OF HOMEWORK"},
+  {value:"GIVES GOOD FEEDBACK", label:"GIVES GOOD FEEDBACK"},
+  {value:"AMAZING LECTURES", label:"AMAZING LECTURES"},
+  {value:"PARTICIPATION MATTERS", label:"PARTICIPATION MATTERS"},
+  {value:"TOUGH GRADER", label:"TOUGH GRADER"},
+  {value:"TEST HEAVY", label:"TEST HEAVY"},
+  {value:"CARING", label:"CARING"}, 
+  {value:"HILARIOUS", label:"HILARIOUS"}
+]
 const marks = {
   1: <strong>1</strong>,
   2: <strong>2</strong>,
@@ -33,13 +47,17 @@ const marks = {
 
 export default class Rate extends Component {
   state = {
+    loading: true,
+    courseFormLoad: false,
+    profFormLoad: false,
     universities: [],
     courses: [],
     profs: [],
     selectedProf: {},
     selectedUni: {},
     selectedCourse: {},
-    uniSelect: false, //switch to disabled,
+    uniSelect: false,
+    courseSelect: false,
     qualityRating: 1,
     difficultyRating: 1,
     wytia: "",
@@ -53,15 +71,50 @@ export default class Rate extends Component {
     confirmPassword: "",
     tandc: false,
     errors: false,
+    errMessage: "",
+    tags:[],
+    selectedTag:[]
   }
   handleUniChange = (newValue, actionMeta) => {
-    this.setState({ selectedUni: newValue, uniSelect: true });
+    this.setState({ selectedUni: newValue, courseFormLoad: true});
+    this.fetchCourses(newValue);
+  };
+  fetchCourses = async (newValue) =>{
+    try {
+      let result = await axios.post("/api/find-form",{"uni_id": newValue.value,"course_id": "","prof_id": ""});
+      this.setState({
+        courses: result.data.data,
+        uniSelect: true ,
+        courseFormLoad: false
+      })
+    } catch (error) {
+      console.log(error);
+    }
   };
   handleCourseChange = (newValue, actionMeta) => {
-    this.setState({ selectedCourse: newValue });
+    this.setState({ selectedCourse: newValue, profFormLoad: true});
+    this.fetchProfs(newValue);
+  };
+  fetchProfs = async(newValue) => {
+    try {
+      let result = await axios.post("/api/find-form",
+      {"uni_id": this.state.selectedUni.value,
+      "course_id": newValue.value,
+      "prof_id": ""});
+      this.setState({
+        profs: result.data.data,
+        courseSelect: true ,
+        profFormLoad: false
+      })
+    } catch (error) {
+      console.log(error);
+    }
   };
   handleProfChange = (newValue, actionMeta) => {
     this.setState({ selectedProf: newValue });
+  };
+  handleTagChange = (newValue, actionMeta) => {
+    this.setState({ selectedTag: newValue });
   };
   handleInputChange = (inputValue, actionMeta) => { };
 
@@ -73,39 +126,65 @@ export default class Rate extends Component {
     this.setState({ difficultyRating: val });
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async(e) => {
     e.preventDefault();
     if (Object.keys(this.state.selectedUni).length === 0 && this.state.selectedUni.constructor === Object) {
-      this.setState({ errors: true });
+      this.setState({ errors: true , errMessage: "Please select or create your university"});
     }
     else if (Object.keys(this.state.selectedCourse).length === 0 && this.state.selectedCourse.constructor === Object) {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please select or create your course" });
     }
     else if (Object.keys(this.state.selectedProf).length === 0 && this.state.selectedProf.constructor === Object) {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please select or create your professor" });
     }
     else if (this.state.wytia === "") {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please answer if you would take this class again" });
     }
     else if (this.state.credit === "") {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please answer if you took this class for credit" });
     }
     else if (this.state.textbook === "") {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please answer if you needed a textbook for this class" });
     }
     else if (this.state.attendance === "") {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please answer if your attendance was mandatory" });
     }
     else if (this.state.comment === "") {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please leave a comment"});
     }
     else if (this.state.tandc === false) {
-      this.setState({ errors: true });
+      this.setState({ errors: true, errMessage: "Please agree to the terms and conditions" });
     }
     else {
-      this.setState({ errors: false });
+      this.setState({loading:true});
+      const formData = {
+        selectedUni: this.state.selectedUni,
+        selectedCourse: this.state.selectedCourse,
+        selectedProf: this.state.selectedProf,
+        qualityRating: this.state.qualityRating,
+        difficultyRating: this.state.difficultyRating,
+        wytia: this.state.wytia === "YES",
+        credit: this.state.credit === "YES",
+        textbook: this.state.textbook === "YES",
+        attendance: this.state.attendance === "YES",
+        grade: this.state.grade,
+        tags: this.state.selectedTag,
+        comment: this.state.comment,
+        email: this.state.email,
+        password: this.state.password,
+        confirmPassword: this.state.confirmPassword,
+        tandc: this.state.tandc
+      }
+      try {
+        const response = await axios.post('/api/rate', formData);
+        this.setState({ errors: false });
+        Router.push('/success/'+response.data.data.pid);
+      } catch (error) {
+        console.log(error);
+        this.setState({ errors: true, errMessage:"Something went wrong...Try again Later!", loadin:false });
+      }
+      console.log(formData);
     }
-    console.log(this.state);
   }
 
   handleChange = (e) => {
@@ -115,18 +194,22 @@ export default class Rate extends Component {
   handleTac = () => {
     this.setState({ tandc: !this.state.tandc });
   }
-  componentDidMount() {
-    this.setState({
-      universities: options, //check if there is a nbetter way to do it with SSR
-      courses: options2,
-      profs: options3
-    })
+  async componentDidMount() {
+    try {
+      let result = await axios.post("/api/find-form",{"uni_id": "","course_id": "","prof_id": ""});
+      this.setState({
+        universities: result.data.data,
+        loading: false
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
     return (
       <Layout>
-        <Form>
+       {this.state.loading ? <Loading />:<Form>
           <FormGroup>
             {/* Select University */}
             <h5>University</h5>
@@ -138,7 +221,7 @@ export default class Rate extends Component {
               placeholder="Select or create your Uni"
             />
           </FormGroup>
-          <FormGroup>
+          {this.state.courseFormLoad ? <LoadingSm/>: <FormGroup>
             {/* Select Course */}
             <h5>Course</h5>
             <CreatableSelect
@@ -149,8 +232,8 @@ export default class Rate extends Component {
               placeholder="Select or create your Course"
               isDisabled={!this.state.uniSelect}
             />
-          </FormGroup>
-          <FormGroup>
+          </FormGroup>}
+          {this.state.profFormLoad?<LoadingSm />:<FormGroup>
             {/* Select Prof */}
             <h5>Professor</h5>
             <CreatableSelect
@@ -159,9 +242,9 @@ export default class Rate extends Component {
               onInputChange={this.handleInputChange}
               options={this.state.profs}
               placeholder="Select or enter your professor"
-              isDisabled={!this.state.uniSelect}
+              isDisabled={!this.state.courseSelect}
             />
-          </FormGroup>
+          </FormGroup>}
           <FormGroup >
             {/* Quality */}
             <h5>Quality:</h5>
@@ -265,6 +348,20 @@ export default class Rate extends Component {
             </Input>
           </FormGroup>
           {/* Select tags */}
+          <FormGroup>
+            <h5>Select the tags that best describe your course <small>(Optional)</small></h5>
+            <Select
+                isMulti
+                name="tags"
+                options={tags}
+                className="basic-multi-select"
+                classNamePrefix="tag_select"
+                defaultValue = {this.state.tags}
+                onChange = {this.handleTagChange}
+                onInputChange={this.handleInputChange}
+            />
+          </FormGroup>
+          
           {/* Get specific */}
           <FormGroup>
             <Label for="comment"><h5>Your feedback:</h5></Label>
@@ -303,6 +400,10 @@ export default class Rate extends Component {
               {/* recheck before launch */}
             </Label>
           </FormGroup>
+          {/* alert */}
+          {this.state.errors && <Alert color="danger">
+          {this.state.errMessage}
+          </Alert>}
           {/* submit */}
           <Row className="align-items-center mb-3">
             <Col></Col>
@@ -312,10 +413,8 @@ export default class Rate extends Component {
             <Col></Col>
           </Row>
 
-        </Form>
-        {this.state.errors && <Alert color="danger">
-          Oops! You missed something!
-      </Alert>}
+        </Form>}
+       
       </Layout>
     );
   }
